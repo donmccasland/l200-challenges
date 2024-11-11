@@ -1,0 +1,4 @@
+nicegui
+google-cloud-aiplatform
+langchain>=0.0.142
+langchain_openai
