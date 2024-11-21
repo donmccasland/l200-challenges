@@ -1,0 +1,6 @@
+google-cloud-aiplatform
+langchain
+langchain-google-vertexai
+langgraph
+langchain-community
+deepeval
