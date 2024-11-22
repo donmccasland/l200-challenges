@@ -12,7 +12,7 @@ from langchain.chains import (
         create_retrieval_chain
 )
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_community.document_loaders import JSONLoader
+from langchain_community.document_loaders import JSONLoader, PyPDFLoader
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.vectorstores import InMemoryVectorStore
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -44,6 +44,9 @@ class TravelChatBot:
         embeddings = VertexAIEmbeddings(model_name="text-embedding-004")
         loader = JSONLoader(file_path="./hotels.json", jq_schema=".hotels[]", text_content=False)
         docs = loader.load()
+        loader = PyPDFLoader("./Must-Have-guide-to-Florence-www.goinspired.com_.pdf")
+        for page in loader.load():
+            docs.append(page)
 
         self.vectorstore = InMemoryVectorStore.from_documents(
             documents=docs, embedding=embeddings
@@ -110,15 +113,9 @@ class TravelChatBot:
             "Hi there!",
             "How are you today?"
         ]
-        self.responses = [
-            "Tell me more!",
-            "Interesting.",
-            "I see.",
-            "Can you elaborate?"
-        ]
 
     def model(self):
-        return self.llm
+        return self.rag_chain
 
     def greet(self):
         return random.choice(self.greetings)
